@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import { useParams } from "react-router";
 
@@ -9,6 +10,12 @@ export default function TravelDetails() {
   const currentTravel = TravelData[id - 1];
   console.log(currentTravel);
   console.log(currentTravel.participants);
+  const [searchUser, setsearchUser] = useState("");
+
+  const filteredParticipants = currentTravel.participants.filter(
+    (participant) =>
+      participant.full_name.toLowerCase().includes(searchUser.toLowerCase())
+  );
   return (
     <div>
       <Link to="/">
@@ -27,7 +34,15 @@ export default function TravelDetails() {
           <section className="mt-4">
             <h2>Rubrica</h2>
 
-            {currentTravel.participants?.map((partecipant) => (
+            <input
+              type="text"
+              placeholder="Cerca partecipante..."
+              value={searchUser}
+              onChange={(e) => setsearchUser(e.target.value)}
+              className="border p-2 mb-4 w-full"
+            />
+
+            {filteredParticipants.map((partecipant) => (
               <div key={partecipant.user_id}>
                 <h3>{partecipant.full_name}</h3>
                 <h3>{partecipant.phone_number}</h3>
